@@ -25,9 +25,10 @@ cd /path/to/whmcs/modules/security
 git clone https://git.private.coffee/kumisystems/whmcs-oidc_admin_login.git 
 cd whmcs-oidc_admin_login
 composer install
+cp config.dist.php config.php
 ```
 
-2. Configure the module by editing the `oidc_admin_login/config.php` file.
+2. Configure the module by editing the `config.php` file.
 
 ## Usage
 
