@@ -14,14 +14,14 @@ at your own risk.
 
 ## Installation
 
-1. Install the module by uploading it to your WHMCS installation directory.
+1. Install the module by uploading it to your WHMCS installation directory and
+installing the dependencies using Composer.
 
 ```bash
 cd /path/to/whmcs/modules/addons
 git clone https://git.private.coffee/kumisystems/whmcs-oidc_admin_login.git oidc_admin_login
 cd oidc_admin_login
 composer install
-cp config.dist.php config.php
 ```
 
 2. Enable the module in the WHMCS admin area.
