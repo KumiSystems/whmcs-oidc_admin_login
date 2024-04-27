@@ -1,51 +1,63 @@
 <?php
 
-require_once 'vendor/autoload.php';
-require_once "../../../init.php";
+function oidc_admin_login_config()
+{
+    // Plugin details displayed by WHMCS
+    return [
+        'name' => 'OIDC Admin Login',
+        'description' => 'This module provides an OpenID Connect based single sign-on (SSO) solution for WHMCS admin users.',
+        'version' => '0.1',
+        'author' => 'Kumi Systems e.U.',
+        'fields' => [
+            // Configuration fields for the module
+            // Displayed in WHMCS admin area under Addon Modules and used to store OIDC provider details
+            'oidcProviderUrl' => [
+                'FriendlyName' => 'OIDC Provider URL',
+                'Type' => 'text',
+                'Size' => '25',
+                'Default' => '',
+                'Description' => 'Enter the URL of your OIDC provider.',
+            ],
+            'clientId' => [
+                'FriendlyName' => 'Client ID',
+                'Type' => 'text',
+                'Size' => '25',
+                'Default' => '',
+                'Description' => 'Enter the client ID provided by your OIDC provider.',
+            ],
+            'clientSecret' => [
+                'FriendlyName' => 'Client Secret',
+                'Type' => 'password',
+                'Size' => '25',
+                'Default' => '',
+                'Description' => 'Enter the client secret provided by your OIDC provider.',
+            ],
+            'oidcClaim' => [
+                'FriendlyName' => 'OIDC Claim',
+                'Type' => 'text',
+                'Size' => '25',
+                'Default' => 'preferred_username',
+                'Description' => 'Enter the OIDC claim to use as the WHMCS username.',
+            ],
+            'oidcScopes' => [
+                'FriendlyName' => 'OIDC Scopes',
+                'Type' => 'text',
+                'Size' => '25',
+                'Default' => 'openid,email,profile',
+                'Description' => 'Enter the OIDC scopes to request from the provider, separated by commas.',
+            ],
+        ],
+    ];
+}
 
-require_once "config.php";
+function oidc_admin_login_activate()
+{
+    // Code to execute when the module is activated
+    return ['status' => 'success', 'description' => 'OIDC Admin Login activated successfully'];
+}
 
-use Jumbojett\OpenIDConnectClient;
-
-// Initialize the OIDC client
-$oidc = new OpenIDConnectClient($oidcProviderUrl, $clientID, $clientSecret);
-$oidc->addScope(['openid', 'email', 'profile']);
-
-try {
-    // Authenticate the user with the OIDC provider
-    $oidc->authenticate();
-
-    // Fetch the user's details
-    $userInfo = $oidc->requestUserInfo();
-
-    // The 'preferred_username' claim will be used as the WHMCS username
-    if (isset($userInfo->preferred_username)) {
-        $username = $userInfo->preferred_username;
-
-        // Initialize WHMCS authentication class
-        $auth = new WHMCS\Auth();
-
-        // Attempt to find and authenticate the user by username
-        if ($auth->getInfobyUsername($username)) {
-            // Set session variables for the logged-in user
-            $auth->setSessionVars();
-
-            $redirectUri = '/admin/';
-            header('Location: ' . $redirectUri);
-            exit;
-        } else {
-            // Handle the error case where the username doesn't exist in WHMCS
-            error_log("OIDC SSO login failed: Username not found in WHMCS");
-            // TODO: Redirect to a failure page
-            die("OIDC SSO login failed: Username not found in WHMCS");
-        }
-    } else {
-        // Handle missing username claim
-        error_log("OIDC SSO login failed: Username claim not found in user info");
-        exit;
-    }
-} catch (Exception $e) {
-    // Handle errors, such as authentication failures
-    error_log("OIDC SSO login error: " . $e->getMessage());
-    die("OIDC SSO login error: " . $e->getMessage());
+function oidc_admin_login_deactivate()
+{
+    // Code to execute when the module is deactivated
+    return ['status' => 'success', 'description' => 'OIDC Admin Login deactivated successfully'];
 }
