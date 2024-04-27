@@ -26,7 +26,7 @@ composer install
 
 2. Enable the module in the WHMCS admin area.
 
-- Go to `Setup` -> 'System Settings' -> `Addon Modules`. (https://your-whmcs-domain.com/admin/configaddonmods.php)
+- Go to `Setup` -> `System Settings` -> `Addon Modules`. (https://your-whmcs-domain.com/admin/configaddonmods.php)
 - Click on `Activate` next to `OIDC Admin Login`.
 - Click on `Configure` next to `OIDC Admin Login`.
 - Enter the OIDC provider configuration details in the form.
